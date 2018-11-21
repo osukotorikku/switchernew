@@ -23,8 +23,14 @@ namespace KotorikkuSwitcher
                 serverAddress + " osu.ppy.sh",
                 serverAddress + " c.ppy.sh",
                 serverAddress + " c1.ppy.sh",
+                serverAddress + " c2.ppy.sh",
+                serverAddress + " c3.ppy.sh",
                 serverAddress + " c4.ppy.sh",
+                serverAddress + " c5.ppy.sh",
+                serverAddress + " c6.ppy.sh",
+                serverAddress + " ce.ppy.sh",
                 serverAddress + " a.ppy.sh",
+                serverAddress + " s.ppy.sh",
                 serverAddress + " i.ppy.sh",
                 serverAddress + " bm6.ppy.sh"
             );
