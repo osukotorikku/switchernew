@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GatariSwitcher.Properties
+namespace KotorikkuSwitcher.Properties
 {
 
 

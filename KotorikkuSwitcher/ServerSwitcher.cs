@@ -1,20 +1,20 @@
 ﻿using System.Linq;
-using GatariSwitcher.Extensions;
-using GatariSwitcher.Helpers;
+using KotorikkuSwitcher.Extensions;
+using KotorikkuSwitcher.Helpers;
 using System.Threading.Tasks;
 
-namespace GatariSwitcher
+namespace KotorikkuSwitcher
 {
     class ServerSwitcher
     {
         private readonly string serverAddress;
 
-        public ServerSwitcher(string gatariIpAddress)
+        public ServerSwitcher(string KotorikkuIpAddress)
         {
-            this.serverAddress = gatariIpAddress;
+            this.serverAddress = KotorikkuIpAddress;
         }
 
-        public void SwitchToGatari()
+        public void SwitchToKotorikku()
         {
             var lines = HostsFile.ReadAllLines();
             var result = lines.Where(x => !x.Contains("ppy.sh")).ToList();
@@ -23,8 +23,10 @@ namespace GatariSwitcher
                 serverAddress + " osu.ppy.sh",
                 serverAddress + " c.ppy.sh",
                 serverAddress + " c1.ppy.sh",
+                serverAddress + " c4.ppy.sh",
                 serverAddress + " a.ppy.sh",
-                serverAddress + " i.ppy.sh"
+                serverAddress + " i.ppy.sh",
+                serverAddress + " bm6.ppy.sh"
             );
             HostsFile.WriteAllLines(result);
         }
@@ -41,14 +43,14 @@ namespace GatariSwitcher
 
         public Server GetCurrentServer()
         {
-            bool isGatari = HostsFile.ReadAllLines().Any(x => x.Contains("osu.ppy.sh") && !x.Contains("#"));
-            return isGatari ? Server.Gatari : Server.Official;
+            bool isKotorikku = HostsFile.ReadAllLines().Any(x => x.Contains("osu.ppy.sh") && !x.Contains("#"));
+            return isKotorikku ? Server.Kotorikku : Server.Official;
         }
     }
 
     public enum Server
     {
         Official,
-        Gatari
+        Kotorikku
     }
 }

@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 
-namespace GatariSwitcher
+namespace KotorikkuSwitcher
 {
     public partial class MainWindow : Window
     {
@@ -30,12 +30,12 @@ namespace GatariSwitcher
             await CheckSertificate();
 
             // load server ip
-            var serverIp = await GeneralHelper.GetGatariAddressAsync();
+            var serverIp = await GeneralHelper.GetKotorikkuAddressAsync();
             if (serverIp == string.Empty)
             {
-                MessageBox.Show("Ошибка при получении IP-адреса гатарей. Возможно, у вас проблемы с Интернетом?" + Environment.NewLine +
+                MessageBox.Show("Ошибка при получении IP-адреса kotorikku. Возможно, у вас проблемы с Интернетом?" + Environment.NewLine +
                     "Будет использоваться встроенный IP-адрес. Быть может, он уже устарел.");
-                serverIp = Constants.GatariHardcodedIp;
+                serverIp = Constants.KotorikkuHardcodedIp;
             }
             serverSwitcher = new ServerSwitcher(serverIp);
 
@@ -55,10 +55,10 @@ namespace GatariSwitcher
         {
             switchButton.IsEnabled = false;
             var currentServer = await serverSwitcher.GetCurrentServerAsync();
-            statusLabel.Content = (currentServer == Server.Gatari)
-                ? Constants.UiYouArePlayingOnGatari : Constants.UiYouArePlayingOnOfficial;
+            statusLabel.Content = (currentServer == Server.Kotorikku)
+                ? Constants.UiYouArePlayingOnKotorikku : Constants.UiYouArePlayingOnOfficial;
             switchButton.Content = (currentServer == Server.Official)
-                ? Constants.UiSwitchToGatari : Constants.UiSwitchToOfficial;
+                ? Constants.UiSwitchToKotorikku : Constants.UiSwitchToOfficial;
             switchButton.IsEnabled = true;
         }
 
@@ -75,7 +75,7 @@ namespace GatariSwitcher
             {
                 if (serv == Server.Official)
                 {
-                    serverSwitcher.SwitchToGatari();
+                    serverSwitcher.SwitchToKotorikku();
                 }
                 else
                 {
@@ -84,7 +84,7 @@ namespace GatariSwitcher
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Произошла ошибка при переключении сервера. Если вы уверены, что её не должно быть и у вас отключен антивирус, обратитесь за помощью! Мои контакты можно найти в блоке контактов группы в ВК"
+                MessageBox.Show("Произошла ошибка при переключении сервера. Если вы уверены, что её не должно быть и у вас отключен антивирус, обратитесь за помощью! support@kotorikku.ru"
                 + string.Format("\r\n\r\nДетали:\r\n{0}", ex.Message));
                 Logger.Log(ex);
             }
@@ -125,7 +125,7 @@ namespace GatariSwitcher
 
         private void websiteText_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://osu.gatari.pw");
+            System.Diagnostics.Process.Start("https://kotorikku.ru");
         }
 
         private void titleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

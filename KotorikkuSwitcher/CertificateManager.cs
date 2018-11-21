@@ -2,7 +2,7 @@
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
-namespace GatariSwitcher
+namespace KotorikkuSwitcher
 {
     class CertificateManager
     {
@@ -16,7 +16,7 @@ namespace GatariSwitcher
             var store = new X509Store(StoreName.Root, StoreLocation.CurrentUser);
             store.Open(OpenFlags.ReadWrite);
 
-            var certificate = new X509Certificate2(GatariSwitcher.Properties.Resources.gatari);
+            var certificate = new X509Certificate2(KotorikkuSwitcher.Properties.Resources.Kotorikku);
             store.Add(certificate);
 
             store.Close();

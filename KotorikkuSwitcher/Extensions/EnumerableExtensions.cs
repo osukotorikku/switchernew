@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GatariSwitcher.Extensions
+namespace KotorikkuSwitcher.Extensions
 {
     static class EnumerableExtensions
     {
