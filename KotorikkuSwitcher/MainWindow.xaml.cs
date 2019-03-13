@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 
-namespace KotorikkuSwitcher
+namespace KurikkuSwitcher
 {
     public partial class MainWindow : Window
     {
@@ -30,14 +30,14 @@ namespace KotorikkuSwitcher
             await CheckSertificate();
 
             // load server ip
-            var serverIp = await GeneralHelper.GetKotorikkuAddressAsync();
-            if (serverIp == string.Empty)
+            var serverIps = await GeneralHelper.GetKurikkuAddressAsync();
+            if (serverIps[0] == string.Empty || serverIps[1] == string.Empty)
             {
-                MessageBox.Show("Ошибка при получении IP-адреса kotorikku. Возможно, у вас проблемы с Интернетом?" + Environment.NewLine +
+                MessageBox.Show("Ошибка при получении IP-адреса kurikku. Возможно, у вас проблемы с Интернетом?" + Environment.NewLine +
                     "Будет использоваться встроенный IP-адрес. Быть может, он уже устарел.");
-                serverIp = Constants.KotorikkuHardcodedIp;
+                serverIps = new string[]{ Constants.KurikkuHardcodedIp, Constants.KurikkuHardcodedBMIp };
             }
-            serverSwitcher = new ServerSwitcher(serverIp);
+            serverSwitcher = new ServerSwitcher(serverIps[0], serverIps[1]);
 
             // switcher init
             await CheckServer();
@@ -49,16 +49,19 @@ namespace KotorikkuSwitcher
             var certificateStatus = await certificateManager.GetStatusAsync();
             certButton.Content = certificateStatus ? Constants.UiUninstallCertificate : Constants.UiInstallCertificate;
             certButton.IsEnabled = true;
+
+            var certificateStatusOrg = await certificateManager.GetOrganisationAsync();
+            certStatus.Text = "Установлен сертификат "+certificateStatusOrg;
         }
 
         private async Task CheckServer()
         {
             switchButton.IsEnabled = false;
             var currentServer = await serverSwitcher.GetCurrentServerAsync();
-            statusLabel.Content = (currentServer == Server.Kotorikku)
-                ? Constants.UiYouArePlayingOnKotorikku : Constants.UiYouArePlayingOnOfficial;
+            statusLabel.Content = (currentServer == Server.Kurikku)
+                ? Constants.UiYouArePlayingOnKurikku : Constants.UiYouArePlayingOnOfficial;
             switchButton.Content = (currentServer == Server.Official)
-                ? Constants.UiSwitchToKotorikku : Constants.UiSwitchToOfficial;
+                ? Constants.UiSwitchToKurikku : Constants.UiSwitchToOfficial;
             switchButton.IsEnabled = true;
         }
 
@@ -75,7 +78,7 @@ namespace KotorikkuSwitcher
             {
                 if (serv == Server.Official)
                 {
-                    serverSwitcher.SwitchToKotorikku();
+                    serverSwitcher.SwitchToKurikku();
                 }
                 else
                 {
@@ -84,7 +87,7 @@ namespace KotorikkuSwitcher
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Произошла ошибка при переключении сервера. Если вы уверены, что её не должно быть и у вас отключен антивирус, обратитесь за помощью! support@kotorikku.ru"
+                MessageBox.Show("Произошла ошибка при переключении сервера. Если вы уверены, что её не должно быть и у вас отключен антивирус, обратитесь за помощью! support@kurikku.pw"
                 + string.Format("\r\n\r\nДетали:\r\n{0}", ex.Message));
                 Logger.Log(ex);
             }
@@ -125,7 +128,7 @@ namespace KotorikkuSwitcher
 
         private void websiteText_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://kotorikku.ru");
+            System.Diagnostics.Process.Start("https://kurikku.pw");
         }
 
         private void titleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

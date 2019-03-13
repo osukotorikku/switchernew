@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace KotorikkuSwitcher
+namespace KurikkuSwitcher
 {
     static class Logger
     {
@@ -38,7 +38,7 @@ namespace KotorikkuSwitcher
             get
             {
                 return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                    "kotorikku-switcher-log.txt");
+                    "kurikku-switcher-log.txt");
             }
         }
     }

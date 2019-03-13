@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace KotorikkuSwitcher.Extensions
+namespace KurikkuSwitcher.Extensions
 {
     static class ListExtensions
     {

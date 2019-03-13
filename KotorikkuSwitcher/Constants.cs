@@ -1,24 +1,25 @@
-﻿namespace KotorikkuSwitcher
+﻿namespace KurikkuSwitcher
 {
     public class Constants
     {
         // Use this address if the IP API is dead :D
-        public const string KotorikkuHardcodedIp = "142.93.172.159";
+        public const string KurikkuHardcodedIp = "51.15.117.225";
+        public const string KurikkuHardcodedBMIp = "46.101.90.11";
 
         // The address that can die :D
-        public const string KotorikkuIpApiAddress = "http://kotorikku.ru";
+        public const string KurikkuIpApiAddress = "https://ip.kurikku.pw/hardcoded.json";
 
         public const string UiInstallCertificate = "Установить сертификат";
 
         public const string UiUninstallCertificate = "Удалить сертификат";
 
-        public const string UiYouArePlayingOnKotorikku = "Добро пожаловать на kotorikku";
+        public const string UiYouArePlayingOnKurikku = "Добро пожаловать на kurikku";
 
         public const string UiYouArePlayingOnOfficial = "Вы играете на официальном банчо :(";
 
-        public const string UiSwitchToKotorikku = "Перейти на kotorikku";
+        public const string UiSwitchToKurikku = "Перейти на kurikku";
 
-        public const string UiSwitchToOfficial = "Вернуться на оффициальный банчо";
+        public const string UiSwitchToOfficial = "Вернуться на официальный банчо";
 
         public const string UiUpdatingStatus = "Получение адресов, ожидайте...";
     }

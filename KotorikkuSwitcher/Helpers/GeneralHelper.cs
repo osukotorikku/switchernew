@@ -1,13 +1,28 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 
-namespace KotorikkuSwitcher
+namespace KurikkuSwitcher
 {
     static class GeneralHelper
     {
-        public async static Task<string> GetKotorikkuAddressAsync()
+        public async static Task<string[]> GetKurikkuAddressAsync()
         {
-            return "142.93.172.159";
+            using (var webClient = new WebClient())
+            {
+                string result = string.Empty;
+                try
+                {
+                    var line = await webClient.DownloadStringTaskAsync(Constants.KurikkuIpApiAddress);
+                    result = line;
+                }
+                catch { }
+
+                string[] resultToReturn = result.Trim().ToString().Split('|');
+                if (result.Trim() == string.Empty) {
+                    resultToReturn = new string[] { "", "" };
+                }
+                return resultToReturn;
+            }
         }
     }
 }

@@ -1,20 +1,21 @@
 ﻿using System.Linq;
-using KotorikkuSwitcher.Extensions;
-using KotorikkuSwitcher.Helpers;
+using KurikkuSwitcher.Extensions;
+using KurikkuSwitcher.Helpers;
 using System.Threading.Tasks;
 
-namespace KotorikkuSwitcher
+namespace KurikkuSwitcher
 {
     class ServerSwitcher
     {
-        private readonly string serverAddress;
+        private readonly string serverAddress, serverBMAddress;
 
-        public ServerSwitcher(string KotorikkuIpAddress)
+        public ServerSwitcher(string KurikkuIpAddress, string KurikkuBMIpAddress)
         {
-            this.serverAddress = KotorikkuIpAddress;
+            this.serverAddress = KurikkuIpAddress;
+            this.serverBMAddress = KurikkuBMIpAddress;
         }
 
-        public void SwitchToKotorikku()
+        public void SwitchToKurikku()
         {
             var lines = HostsFile.ReadAllLines();
             var result = lines.Where(x => !x.Contains("ppy.sh")).ToList();
@@ -32,7 +33,7 @@ namespace KotorikkuSwitcher
                 serverAddress + " a.ppy.sh",
                 serverAddress + " s.ppy.sh",
                 serverAddress + " i.ppy.sh",
-                serverAddress + " bm6.ppy.sh"
+                serverBMAddress + " bm6.ppy.sh"
             );
             HostsFile.WriteAllLines(result);
         }
@@ -49,14 +50,14 @@ namespace KotorikkuSwitcher
 
         public Server GetCurrentServer()
         {
-            bool isKotorikku = HostsFile.ReadAllLines().Any(x => x.Contains("osu.ppy.sh") && !x.Contains("#"));
-            return isKotorikku ? Server.Kotorikku : Server.Official;
+            bool isKurikku = HostsFile.ReadAllLines().Any(x => x.Contains("osu.ppy.sh") && !x.Contains("#"));
+            return isKurikku ? Server.Kurikku : Server.Official;
         }
     }
 
     public enum Server
     {
         Official,
-        Kotorikku
+        Kurikku
     }
 }
