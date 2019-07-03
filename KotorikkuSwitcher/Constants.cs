@@ -9,18 +9,6 @@
         // The address that can die :D
         public const string KurikkuIpApiAddress = "https://ip.kurikku.pw/hardcoded.json";
 
-        public const string UiInstallCertificate = "Установить сертификат";
-
-        public const string UiUninstallCertificate = "Удалить сертификат";
-
-        public const string UiYouArePlayingOnKurikku = "Добро пожаловать на kurikku";
-
-        public const string UiYouArePlayingOnOfficial = "Вы играете на официальном банчо :(";
-
-        public const string UiSwitchToKurikku = "Перейти на kurikku";
-
-        public const string UiSwitchToOfficial = "Вернуться на официальный банчо";
-
-        public const string UiUpdatingStatus = "Получение адресов, ожидайте...";
+        // Re-writted to CultureInfo
     }
 }

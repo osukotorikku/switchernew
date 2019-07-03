@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Resources;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -11,15 +13,39 @@ namespace KurikkuSwitcher
         ServerSwitcher serverSwitcher;
         CertificateManager certificateManager;
 
+        ResourceManager resourcesApp;
+        CultureInfo cul;
+
+
         public MainWindow()
         {
             Dispatcher.UnhandledException += Dispatcher_UnhandledException;
             InitializeComponent();
             // base init
+            resourcesApp = new ResourceManager("KurikkuSwitcher.Resources.Res", typeof(MainWindow).Assembly);
+            string locale = "en";
+
+            locale = GeneralHelper.GetSetting("locale");
+            if (String.IsNullOrEmpty(locale)) {
+                GeneralHelper.SetSetting("locale", "en");
+            }
+            switch (locale) {
+                case "en":
+                default:
+                    cul = CultureInfo.CreateSpecificCulture("en");
+                    switchLocaleButton.Content = resourcesApp.GetString("UiSwitchToRussian", cul);
+                    break;
+                case "ru":
+                    cul = CultureInfo.CreateSpecificCulture("ru");
+                    switchLocaleButton.Content = resourcesApp.GetString("UiSwitchToEnglish", cul); 
+                    break;
+            }
+
             certificateManager = new CertificateManager();
-            switchButton.Content = "Получение IP адреса...";
-            certButton.Content = "Получение статуса сертификата...";
-            statusLabel.Content = Constants.UiUpdatingStatus;
+            switchButton.Content = resourcesApp.GetString("UiGettingIPs", cul);
+            certButton.Content = resourcesApp.GetString("UiGettingCertificateStatus", cul);
+            certButton.ToolTip = resourcesApp.GetString("UiCertToolTip", cul);
+            statusLabel.Content = resourcesApp.GetString("UiUpdatingStatus", cul);
             DisableSwitching();
             InitSwitcher();
         }
@@ -33,8 +59,8 @@ namespace KurikkuSwitcher
             var serverIps = await GeneralHelper.GetKurikkuAddressAsync();
             if (serverIps[0] == string.Empty || serverIps[1] == string.Empty)
             {
-                MessageBox.Show("Ошибка при получении IP-адреса kurikku. Возможно, у вас проблемы с Интернетом?" + Environment.NewLine +
-                    "Будет использоваться встроенный IP-адрес. Быть может, он уже устарел.");
+                MessageBox.Show(resourcesApp.GetString("UiErrorGettingIPs_1", cul) + Environment.NewLine +
+                    resourcesApp.GetString("UiErrorGettingIPs_2", cul));
                 serverIps = new string[]{ Constants.KurikkuHardcodedIp, Constants.KurikkuHardcodedBMIp };
             }
             serverSwitcher = new ServerSwitcher(serverIps[0], serverIps[1]);
@@ -47,11 +73,11 @@ namespace KurikkuSwitcher
         {
             certButton.IsEnabled = false;
             var certificateStatus = await certificateManager.GetStatusAsync();
-            certButton.Content = certificateStatus ? Constants.UiUninstallCertificate : Constants.UiInstallCertificate;
+            certButton.Content = certificateStatus ? resourcesApp.GetString("UiUninstallCertificate", cul) : resourcesApp.GetString("UiInstallCertificate", cul);
             certButton.IsEnabled = true;
 
             var certificateStatusOrg = await certificateManager.GetOrganisationAsync();
-            certStatus.Text = "Установлен сертификат "+certificateStatusOrg;
+            certStatus.Text = resourcesApp.GetString("UiInstalledCertificate", cul) + certificateStatusOrg;
         }
 
         private async Task CheckServer()
@@ -59,9 +85,9 @@ namespace KurikkuSwitcher
             switchButton.IsEnabled = false;
             var currentServer = await serverSwitcher.GetCurrentServerAsync();
             statusLabel.Content = (currentServer == Server.Kurikku)
-                ? Constants.UiYouArePlayingOnKurikku : Constants.UiYouArePlayingOnOfficial;
+                ? resourcesApp.GetString("UiYouArePlayingOnKurikku", cul) : resourcesApp.GetString("UiYouArePlayingOnOfficial", cul);
             switchButton.Content = (currentServer == Server.Official)
-                ? Constants.UiSwitchToKurikku : Constants.UiSwitchToOfficial;
+                ? resourcesApp.GetString("UiSwitchToKurikku", cul) : resourcesApp.GetString("UiSwitchToOfficial", cul);
             switchButton.IsEnabled = true;
         }
 
@@ -87,8 +113,8 @@ namespace KurikkuSwitcher
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Произошла ошибка при переключении сервера. Если вы уверены, что её не должно быть и у вас отключен антивирус, обратитесь за помощью! support@kurikku.pw"
-                + string.Format("\r\n\r\nДетали:\r\n{0}", ex.Message));
+                MessageBox.Show(resourcesApp.GetString("UiErrorSwitching", cul)
+                + string.Format("\r\n\r\n{0}\r\n{1}", resourcesApp.GetString("UiDetails", cul), ex.Message));
                 Logger.Log(ex);
             }
 
@@ -112,8 +138,8 @@ namespace KurikkuSwitcher
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Произошла ошибка при установке/удалении сертификата."
-                    + string.Format("\r\n\r\nДетали:\r\n{0}", ex.Message));
+                MessageBox.Show(resourcesApp.GetString("UiErrorCertSwitching", cul)
+                    + string.Format("\r\n\r\n{0}\r\n{1}", resourcesApp.GetString("UiDetails", cul), ex.Message));
                 Logger.Log(ex);
             }
 
@@ -140,6 +166,24 @@ namespace KurikkuSwitcher
         void Dispatcher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             Logger.Fatal(e.Exception);
+        }
+
+        void switchLocaleButton_Click(object sender, RoutedEventArgs e) {
+            string locale = GeneralHelper.GetSetting("locale");
+            string nextLocale = "";
+            switch (locale) {
+                case "en":
+                default:
+                    nextLocale = "ru";
+                    break;
+                case "ru":
+                    nextLocale = "en";
+                    break;
+            }
+            GeneralHelper.SetSetting("locale", nextLocale);
+            // Restarting App
+            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+            Application.Current.Shutdown();
         }
     }
 }
